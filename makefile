@@ -4,7 +4,18 @@ NAME := philo
 
 SRC_DIR := src/
 
-SRCS = philosophers.c
+SRCS = philosophers.c \
+	   check.c		  \
+	   debug.c		  \
+	   init.c		  \
+	   utils.c		  \
+	   dinner.c		  \
+	   fork.c		  \
+	   time.c		  \
+	   thread.c		  \
+	   routine.c	  \
+	   start.c		  \
+	   print.c		  \
 
 # --- INCLUDES --- #
 
@@ -23,7 +34,7 @@ DEPS := $(OBJS:.o=.d)
 
 CPPFLAGS += -MMD -MP $(addprefix -I,$(INCLUDES))
 
-CFLAGS += -g3 -Wall -Wextra -Werror 
+CFLAGS += -g3 -Wall -Wextra -Werror -lpthread
 
 # --- COMPILATER --- #
 
