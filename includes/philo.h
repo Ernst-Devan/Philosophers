@@ -48,7 +48,7 @@ typedef struct s_data
 typedef struct s_philo 
 {
 	unsigned int	id;
-	unsigned int	last_meal;
+	unsigned long	last_meal;
 	enum e_state	state;
 	t_fork			*r_fork;
 	t_fork			*l_fork;
@@ -74,7 +74,8 @@ int				assign_fork(t_data *data, t_philo *philo, t_fork *forks);
 int				lock_fork(t_philo *philo);
 int				unlock_fork(t_philo *philo);
 int				take_fork(t_philo *philo, unsigned long time_start);
-int				fork_available(t_philo *philo);
+bool			fork_available(t_philo *philo, unsigned long time_start);
+
 
 // Thread.c
 int				launch_dinner(t_data *data, t_philo *philo);

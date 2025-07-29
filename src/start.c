@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 15:11:29 by dernst            #+#    #+#             */
-/*   Updated: 2025/07/23 15:11:48 by dernst           ###   ########.fr       */
+/*   Updated: 2025/07/29 00:30:59 by dernst           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,6 @@ void	set_ready(t_data *data)
 	pthread_mutex_lock(&data->mutex_state);
 	data->state = 1;
 	data->time_start = get_time();
-	pthread_mutex_unlock(&data->mutex_state);
 	printf("Start Simulation !\n");
+	pthread_mutex_unlock(&data->mutex_state);
 }

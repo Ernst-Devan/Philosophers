@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 15:03:31 by dernst            #+#    #+#             */
-/*   Updated: 2025/07/23 15:15:10 by dernst           ###   ########.fr       */
+/*   Updated: 2025/07/29 00:28:02 by dernst           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	launch_dinner(t_data *data, t_philo *philo)
 	launch_threads(philo, threads);
 	set_ready(data);
 	waiting_threads(data, threads);
+	free(threads);
 	return (0);
 }
 
@@ -48,7 +49,7 @@ int	launch_threads(t_philo *philo, pthread_t *threads)
 	i = 0;
 	while (i < philo->data->nb_philo)
 	{
-		if (pthread_create(&threads[i], NULL, routine, &philo[i]) != 0)
+		if (pthread_create(&threads[i], NULL, &routine, &philo[i]) != 0)
 			return (1);
 		i++;
 	}

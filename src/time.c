@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 16:16:49 by dernst            #+#    #+#             */
-/*   Updated: 2025/07/22 16:17:34 by dernst           ###   ########.fr       */
+/*   Updated: 2025/07/29 00:54:49 by dernst           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,40 @@
 #include <stdio.h>
 #include <pthread.h>
 
-bool	ft_usleep(t_philo *philo, unsigned long time, unsigned long time_start)
+bool	check_death(t_philo *philo, unsigned long time_start)
 {
-	unsigned int i;
+	unsigned long time;
 
-	i = 0;
-	while (i < (time / 1000) / 5)
+	time = current_time(time_start);
+	if (time - philo->last_meal > philo->data->time_die / 1000)
+		return (1);
+	return (0);
+}
+
+bool	ft_usleep(t_philo *philo, unsigned long time_sleep, unsigned long time_start)
+{	
+	unsigned long initial;
+	(void)philo;
+
+	initial = current_time(time_start);
+	while (current_time(time_start) < initial + time_sleep / 1000)
 	{
-		usleep(5 * 1000);
-		pthread_mutex_lock(&philo->data->mutex_die);
-		if (philo->data->philo_die == 1)
-			return (1);
-		pthread_mutex_unlock(&philo->data->mutex_die);
-		if (philo->last_meal >= philo->data->time_die)
+		usleep(100);
+		if (check_death(philo, time_start))
 		{
-			philo->state=  DIE;
+			philo->state = DIE;
 			pthread_mutex_lock(&philo->data->mutex_die);
+			if (philo->data->philo_die == 0)
+				print(philo, DIE, time_start);
 			philo->data->philo_die = 1;
 			pthread_mutex_unlock(&philo->data->mutex_die);
-			print(philo, DIE, time_start);
-			return(1);
+			return (1);
 		}
-		i++;
 	}
 	return (0);
 }
+
+
 
 unsigned long get_time()
 {
