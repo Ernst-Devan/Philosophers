@@ -28,8 +28,12 @@ void	init_data(t_data *data, char **argv, int argc)
 	else
 		data->nb_eat = -1;
 	data->state = WAIT;
+	data->philo_die = 0;
+	data->all_eat = 0;
 	pthread_mutex_init(&data->mutex_state, NULL);
 	pthread_mutex_init(&data->mutex_printf, NULL);
+	pthread_mutex_init(&data->mutex_die, NULL);
+	pthread_mutex_init(&data->mutex_eat, NULL);
 }
 
 int	invite_philosophers(t_data *data, t_philo **philo)
@@ -46,6 +50,7 @@ int	invite_philosophers(t_data *data, t_philo **philo)
 		(*philo)[i].l_fork = NULL;
 		(*philo)[i].r_fork = NULL;
 		(*philo)[i].data = data;
+		(*philo)[i].last_meal = 0;
 		i++;
 	}
 	return (0);

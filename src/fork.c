@@ -13,6 +13,7 @@
 #include "philo.h"
 #include <pthread.h>
 #include <sys/types.h>
+#include <stdio.h>
 
 int	assign_fork(t_data *data, t_philo *philo, t_fork *forks)
 {
