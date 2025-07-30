@@ -16,6 +16,7 @@ SRCS = philosophers.c \
 	   routine.c	  \
 	   start.c		  \
 	   print.c		  \
+	   death.c	      \
 
 # --- INCLUDES --- #
 

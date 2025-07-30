@@ -16,8 +16,10 @@
 #include <unistd.h>
 #include "philo.h"
 #include "stdlib.h"
+#include <stdio.h>
 //dont accept number more than int max and negative number
 // Number of philo musn't be 0 or negative or too high
+// Dont take ascii char just positive number
 
 int	prepare_dinner(t_data *data, t_philo **philo, t_fork **fork)
 {
@@ -36,9 +38,14 @@ int	main(int argc, char **argv)
 	t_fork		*fork;
 	t_philo		*philo;
 
-	if (check_args(argc))
+	if (check_args(argv, argc))
 		return (1);
 	init_data(&data, argv, argc);
+	if (data.nb_philo == 0)
+	{
+		printf("0 PHILO ???\n");
+		return (1);
+	}
 	//Check the value of each args and chose if it's valid or not like nb_philo musn't be negative or null
 	if (prepare_dinner(&data, &philo, &fork))
 		return (1);

@@ -38,8 +38,17 @@ bool	is_even(unsigned int nb)
 	return (0);
 }
 
-bool	take_r_fork(t_philo *philo, unsigned long time_start)
+u_int8_t	take_r_fork(t_philo *philo, unsigned long time_start)
 {
+	pthread_mutex_lock(&philo->data->mutex_die);
+		if (philo->data->philo_die == 1)
+			return (2);
+	pthread_mutex_unlock(&philo->data->mutex_die);
+	if (check_death(philo, time_start))
+	{
+		kill_philo(philo, time_start);
+		return (2);
+	}
 	pthread_mutex_lock(&philo->r_fork->mutex);
 	if (philo->r_fork->state == 0)
 	{
@@ -55,8 +64,17 @@ bool	take_r_fork(t_philo *philo, unsigned long time_start)
 	return (1);
 }
 
-bool	take_l_fork(t_philo *philo, unsigned long time_start)
-{
+u_int8_t	take_l_fork(t_philo *philo, unsigned long time_start)
+{	
+	pthread_mutex_lock(&philo->data->mutex_die);
+		if (philo->data->philo_die == 1)
+			return (2);
+	pthread_mutex_unlock(&philo->data->mutex_die);
+	if (check_death(philo, time_start))
+	{
+		kill_philo(philo, time_start);
+		return (2);
+	}
 	pthread_mutex_lock(&philo->l_fork->mutex);
 	if (philo->l_fork->state == 0)
 	{
@@ -72,45 +90,39 @@ bool	take_l_fork(t_philo *philo, unsigned long time_start)
 	return (1);
 }
 
-bool	choose_first_fork(t_philo *philo, unsigned long time_start)
+u_int8_t	choose_first_fork(t_philo *philo, unsigned long time_start)
 {
 	if (is_even(philo->id))
-	{
-		if (take_r_fork(philo, time_start))
-			return (1);
-	}
+		return (take_r_fork(philo, time_start));
 	else 
-	{
-		if (take_l_fork(philo, time_start))
-			return (1);
-	}
-	return (0);
+		 return (take_l_fork(philo, time_start));
 }
 
 bool	choose_second_fork(t_philo *philo, unsigned long time_start)
 {
 	if (is_even(philo->id))
-	{
-		if (take_l_fork(philo, time_start))
-			return (1);
-	}
+		return (take_l_fork(philo, time_start));
 	else 
-	{
-		if (take_r_fork(philo, time_start))
-			return (1);
-	}
-	return (0);
+		return (take_r_fork(philo, time_start));
 }
 
 bool fork_available(t_philo *philo, unsigned long time_start)
 {
-	while (choose_first_fork(philo, time_start) == 0)
+	u_int8_t	state;
+
+	state = 0;
+	while (state == 0)
 	{
-		ft_usleep(philo, 100, time_start);
+		state = choose_first_fork(philo, time_start);
+		if (state == 2 || ft_usleep(philo, 100, time_start))
+			return (1);
 	}
-	while (choose_second_fork(philo, time_start) == 0)
+	state = 0;
+	while (state == 0)
 	{
-		ft_usleep(philo, 100, time_start);
+		state = choose_second_fork(philo, time_start);
+		if (state == 2 || ft_usleep(philo, 100, time_start))
+			return (1);
 	}
 	return (0);
 }

@@ -15,25 +15,18 @@
 #include <stdio.h>
 #include <pthread.h>
 
-bool	check_death(t_philo *philo, unsigned long time_start)
-{
-	unsigned long time;
-
-	time = current_time(time_start);
-	if (time - philo->last_meal > philo->data->time_die / 1000)
-		return (1);
-	return (0);
-}
-
 bool	ft_usleep(t_philo *philo, unsigned long time_sleep, unsigned long time_start)
 {	
 	unsigned long initial;
-	(void)philo;
 
 	initial = current_time(time_start);
 	while (current_time(time_start) < initial + time_sleep / 1000)
 	{
 		usleep(100);
+		pthread_mutex_lock(&philo->data->mutex_die);
+		if (philo->data->philo_die == 1)
+			return (1);
+		pthread_mutex_unlock(&philo->data->mutex_die);
 		if (check_death(philo, time_start))
 		{
 			philo->state = DIE;
@@ -47,8 +40,6 @@ bool	ft_usleep(t_philo *philo, unsigned long time_sleep, unsigned long time_star
 	}
 	return (0);
 }
-
-
 
 unsigned long get_time()
 {

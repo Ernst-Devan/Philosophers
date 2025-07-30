@@ -55,6 +55,11 @@ typedef struct s_philo
 	t_data			*data;
 } t_philo;
 
+
+// Death.c
+bool	check_death(t_philo *philo, unsigned long time_start);
+void	kill_philo(t_philo *philo, unsigned long time_start);
+
 // Time.c
 unsigned long	get_time();
 unsigned long	current_time(unsigned long time_start);
@@ -96,7 +101,7 @@ int				go_think(t_philo *philo, unsigned long time_start);
 int				go_eat(t_philo *philo, unsigned long time_start);
 
 // Check.c
-unsigned int	check_args(int argc);
+unsigned int	check_args(char **argv, int argc);
 
 // Print.c
 unsigned int	print(t_philo *philo, enum e_state state, unsigned long time_start);

@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 15:06:24 by dernst            #+#    #+#             */
-/*   Updated: 2025/07/29 00:38:52 by dernst           ###   ########lyon.fr   */
+/*   Updated: 2025/07/30 18:16:44 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,16 @@ void	*routine(void *thread)
 	while (check_ready(philo->data) == 0) 
 		usleep(100);
 	i = 0;
+	if (philo->id % 2)
+		usleep(25000);
 	while (i < philo->data->nb_eat)
 	{
-		go_think(philo, philo->data->time_start);
+		if (go_think(philo, philo->data->time_start))
+			return (NULL);
 		if (go_eat(philo, philo->data->time_start))
 			return (NULL);
-		go_think(philo, philo->data->time_start);
+		if (go_think(philo, philo->data->time_start))
+			return (NULL);
 		i++;
 	}
 	return (NULL);
@@ -46,7 +50,11 @@ int go_sleep(t_philo *philo, unsigned long time_start)
 int	go_think(t_philo *philo, unsigned long time_start)
 {
 	if (philo->state == THINK)
+		return (0);
+	pthread_mutex_lock(&philo->data->mutex_die);
+	if (philo->data->philo_die)
 		return (1);
+	pthread_mutex_unlock(&philo->data->mutex_die);
 	print(philo, THINK, time_start);
 	philo->state = THINK;
 	return (0);
@@ -54,7 +62,8 @@ int	go_think(t_philo *philo, unsigned long time_start)
 
 int go_eat(t_philo *philo, unsigned long time_start)
 {
-	fork_available(philo, time_start);
+	if (fork_available(philo, time_start))
+		return (1);
 	philo->state = EAT;
 	print(philo, EAT, time_start);
 	philo->last_meal = current_time(time_start);
