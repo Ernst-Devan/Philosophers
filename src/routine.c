@@ -53,7 +53,10 @@ int	go_think(t_philo *philo, unsigned long time_start)
 		return (0);
 	pthread_mutex_lock(&philo->data->mutex_die);
 	if (philo->data->philo_die)
+	{
+		pthread_mutex_unlock(&philo->data->mutex_die);
 		return (1);
+	}
 	pthread_mutex_unlock(&philo->data->mutex_die);
 	print(philo, THINK, time_start);
 	philo->state = THINK;

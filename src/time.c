@@ -25,7 +25,10 @@ bool	ft_usleep(t_philo *philo, unsigned long time_sleep, unsigned long time_star
 		usleep(100);
 		pthread_mutex_lock(&philo->data->mutex_die);
 		if (philo->data->philo_die == 1)
+		{
+			pthread_mutex_unlock(&philo->data->mutex_die);
 			return (1);
+		}
 		pthread_mutex_unlock(&philo->data->mutex_die);
 		if (check_death(philo, time_start))
 		{
@@ -44,6 +47,7 @@ bool	ft_usleep(t_philo *philo, unsigned long time_sleep, unsigned long time_star
 unsigned long get_time()
 {
 	struct timeval	tv;
+
 	gettimeofday(&tv, NULL);
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
@@ -51,9 +55,7 @@ unsigned long get_time()
 unsigned long	current_time(unsigned long time_start)
 {
 	unsigned long simulation_time;
-	unsigned long current_time;
 
-	current_time = get_time();
-	simulation_time = current_time - time_start;
+	simulation_time = get_time() - time_start;
 	return (simulation_time);
 }

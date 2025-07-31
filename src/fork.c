@@ -13,9 +13,8 @@
 #include "philo.h"
 #include <pthread.h>
 #include <sys/types.h>
-#include <stdio.h>
 
-int	assign_fork(t_data *data, t_philo *philo, t_fork *forks)
+unsigned int	assign_fork(t_data *data, t_philo *philo, t_fork *forks)
 {
 	unsigned int i;
 
@@ -39,17 +38,15 @@ bool	is_even(unsigned int nb)
 	return (0);
 }
 
-u_int8_t	take_r_fork(t_philo *philo, unsigned long time_start)
+unsigned int take_r_fork(t_philo *philo, unsigned long time_start)
 {
-	pthread_mutex_lock(&philo->data->mutex_die);
-		if (philo->data->philo_die == 1)
-			return (2);
-	pthread_mutex_unlock(&philo->data->mutex_die);
 	if (check_death(philo, time_start))
 	{
 		kill_philo(philo, time_start);
 		return (2);
 	}
+	if (check_philo_die(philo->data))
+		return (2);
 	pthread_mutex_lock(&philo->r_fork->mutex);
 	if (philo->r_fork->state == 0)
 	{
@@ -65,17 +62,15 @@ u_int8_t	take_r_fork(t_philo *philo, unsigned long time_start)
 	return (1);
 }
 
-u_int8_t	take_l_fork(t_philo *philo, unsigned long time_start)
-{	
-	pthread_mutex_lock(&philo->data->mutex_die);
-		if (philo->data->philo_die == 1)
-			return (2);
-	pthread_mutex_unlock(&philo->data->mutex_die);
+unsigned int take_l_fork(t_philo *philo, unsigned long time_start)
+{
 	if (check_death(philo, time_start))
 	{
 		kill_philo(philo, time_start);
 		return (2);
 	}
+	if (check_philo_die(philo->data))
+		return (2);
 	pthread_mutex_lock(&philo->l_fork->mutex);
 	if (philo->l_fork->state == 0)
 	{
@@ -91,7 +86,7 @@ u_int8_t	take_l_fork(t_philo *philo, unsigned long time_start)
 	return (1);
 }
 
-u_int8_t	choose_first_fork(t_philo *philo, unsigned long time_start)
+unsigned int  choose_first_fork(t_philo *philo, unsigned long time_start)
 {
 	if (is_even(philo->id))
 		return (take_r_fork(philo, time_start));
@@ -109,7 +104,7 @@ bool	choose_second_fork(t_philo *philo, unsigned long time_start)
 
 bool fork_available(t_philo *philo, unsigned long time_start)
 {
-	u_int8_t	state;
+	unsigned int	state;
 
 	state = 0;
 	while (state == 0)
@@ -123,6 +118,8 @@ bool fork_available(t_philo *philo, unsigned long time_start)
 	{
 		state = choose_second_fork(philo, time_start);
 		if (state == 2 || ft_usleep(philo, 100, time_start))
+			return (1);
+	if (check_philo_die(philo->data))
 			return (1);
 	}
 	return (0);

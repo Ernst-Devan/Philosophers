@@ -22,6 +22,19 @@ void	kill_philo(t_philo *philo, unsigned long time_start)
 	pthread_mutex_unlock(&philo->data->mutex_die);
 }
 
+
+bool	check_philo_die(t_data *data)
+{
+	pthread_mutex_lock(&data->mutex_die);
+	if (data->philo_die == 1)
+	{
+		pthread_mutex_unlock(&data->mutex_die);
+		return (1);
+	}
+	pthread_mutex_unlock(&data->mutex_die);
+	return (0);
+}
+
 bool	check_death(t_philo *philo, unsigned long time_start)
 {
 	unsigned long time;

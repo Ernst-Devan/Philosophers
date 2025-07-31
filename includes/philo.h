@@ -59,6 +59,7 @@ typedef struct s_philo
 // Death.c
 bool	check_death(t_philo *philo, unsigned long time_start);
 void	kill_philo(t_philo *philo, unsigned long time_start);
+bool	check_philo_die(t_data *data);
 
 // Time.c
 unsigned long	get_time();
@@ -75,7 +76,7 @@ int				invite_philosophers(t_data *data, t_philo **philo);
 int				set_table(unsigned int nb_philo, t_fork **fork);
 
 // Fork.c
-int				assign_fork(t_data *data, t_philo *philo, t_fork *forks);
+unsigned int	assign_fork(t_data *data, t_philo *philo, t_fork *forks);
 int				lock_fork(t_philo *philo);
 int				unlock_fork(t_philo *philo);
 int				take_fork(t_philo *philo, unsigned long time_start);
