@@ -33,6 +33,7 @@ void	*routine(void *thread)
 			return (NULL);
 		if (go_think(philo, philo->data->time_start))
 			return (NULL);
+		usleep(100);
 		i++;
 	}
 	return (NULL);
@@ -83,14 +84,3 @@ int go_eat(t_philo *philo, unsigned long time_start)
 	return (0);
 }
 
-bool	check_philo_starvation(unsigned long int last_meal, unsigned int time_die)
-{
-	if (last_meal >= time_die)
-		return (1);
-	return (0);
-}
-
-int	death_come()
-{
-	return (0);
-}

@@ -16,8 +16,7 @@ void	kill_philo(t_philo *philo, unsigned long time_start)
 {
 	philo->state = DIE;
 	pthread_mutex_lock(&philo->data->mutex_die);
-	if (philo->data->philo_die == 0)
-		print(philo, DIE, time_start);
+	print(philo, DIE, time_start);
 	philo->data->philo_die = 1;
 	pthread_mutex_unlock(&philo->data->mutex_die);
 }

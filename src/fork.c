@@ -31,13 +31,6 @@ unsigned int	assign_fork(t_data *data, t_philo *philo, t_fork *forks)
 	return (0);
 }
 
-bool	is_even(unsigned int nb)
-{
-	if (nb % 2 == 0)
-		return (1);
-	return (0);
-}
-
 unsigned int take_r_fork(t_philo *philo, unsigned long time_start)
 {
 	if (check_death(philo, time_start))
@@ -88,7 +81,7 @@ unsigned int take_l_fork(t_philo *philo, unsigned long time_start)
 
 unsigned int  choose_first_fork(t_philo *philo, unsigned long time_start)
 {
-	if (is_even(philo->id))
+	if (philo->id % 2)
 		return (take_r_fork(philo, time_start));
 	else 
 		 return (take_l_fork(philo, time_start));
@@ -96,7 +89,7 @@ unsigned int  choose_first_fork(t_philo *philo, unsigned long time_start)
 
 bool	choose_second_fork(t_philo *philo, unsigned long time_start)
 {
-	if (is_even(philo->id))
+	if (philo->id % 2)
 		return (take_l_fork(philo, time_start));
 	else 
 		return (take_r_fork(philo, time_start));

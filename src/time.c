@@ -32,12 +32,7 @@ bool	ft_usleep(t_philo *philo, unsigned long time_sleep, unsigned long time_star
 		pthread_mutex_unlock(&philo->data->mutex_die);
 		if (check_death(philo, time_start))
 		{
-			philo->state = DIE;
-			pthread_mutex_lock(&philo->data->mutex_die);
-			if (philo->data->philo_die == 0)
-				print(philo, DIE, time_start);
-			philo->data->philo_die = 1;
-			pthread_mutex_unlock(&philo->data->mutex_die);
+			kill_philo(philo, time_start);
 			return (1);
 		}
 	}
