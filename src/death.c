@@ -12,13 +12,12 @@
 
 #include "philo.h"
 
-void	kill_philo(t_philo *philo, unsigned long time_start)
+unsigned int	kill_philo(t_philo *philo, unsigned long time_start)
 {
 	philo->state = DIE;
-	pthread_mutex_lock(&philo->data->mutex_die);
-	print(philo, DIE, time_start);
-	philo->data->philo_die = 1;
-	pthread_mutex_unlock(&philo->data->mutex_die);
+	if (print(philo, DIE, time_start))
+		return (1);
+	return (0);
 }
 
 

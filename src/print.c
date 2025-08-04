@@ -19,8 +19,19 @@ unsigned int	print(t_philo *philo, enum e_state state, unsigned long time_start)
 {
 	unsigned long	time;
 
+
 	pthread_mutex_lock(&philo->data->mutex_printf);
 	time = current_time(time_start);
+	pthread_mutex_lock(&philo->data->mutex_die);
+	if (philo->data->philo_die == 1)
+	{
+		pthread_mutex_unlock(&philo->data->mutex_die);
+		pthread_mutex_unlock(&philo->data->mutex_printf);
+		return (1);
+	}
+	else if (state == DIE)
+		philo->data->philo_die = 1;
+	pthread_mutex_unlock(&philo->data->mutex_die);
 	printf("%lu %d", time, philo->id);
 	if (state == EAT)
 		printf(" is eating\n");

@@ -57,9 +57,10 @@ typedef struct s_philo
 
 
 // Death.c
-bool	check_death(t_philo *philo, unsigned long time_start);
-void	kill_philo(t_philo *philo, unsigned long time_start);
-bool	check_philo_die(t_data *data);
+bool			check_death(t_philo *philo, unsigned long time_start);
+unsigned int	kill_philo(t_philo *philo, unsigned long time_start);
+bool			check_philo_die(t_data *data);
+unsigned int	death_print(t_philo *philo, unsigned long time_start);
 
 // Time.c
 unsigned long	get_time();

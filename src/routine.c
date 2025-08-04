@@ -42,7 +42,8 @@ void	*routine(void *thread)
 int go_sleep(t_philo *philo, unsigned long time_start)
 {
 	philo->state = SLEEP;
-	print(philo, SLEEP, time_start);
+	if (print(philo, SLEEP, time_start))
+		return (1);
 	if (ft_usleep(philo, philo->data->time_sleep, time_start))
 		return (1);
 	return (0);
@@ -50,8 +51,6 @@ int go_sleep(t_philo *philo, unsigned long time_start)
 
 int	go_think(t_philo *philo, unsigned long time_start)
 {
-	if (philo->state == THINK)
-		return (0);
 	pthread_mutex_lock(&philo->data->mutex_die);
 	if (philo->data->philo_die)
 	{
@@ -59,7 +58,10 @@ int	go_think(t_philo *philo, unsigned long time_start)
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->data->mutex_die);
-	print(philo, THINK, time_start);
+	if (philo->state == THINK)
+		return (0);
+	if (print(philo, THINK, time_start))
+		return (1);
 	philo->state = THINK;
 	return (0);
 }
@@ -69,7 +71,8 @@ int go_eat(t_philo *philo, unsigned long time_start)
 	if (fork_available(philo, time_start))
 		return (1);
 	philo->state = EAT;
-	print(philo, EAT, time_start);
+	if (print(philo, EAT, time_start))
+		return (1);
 	philo->last_meal = current_time(time_start);
 	if (ft_usleep(philo, philo->data->time_eat, time_start))
 		return (1);

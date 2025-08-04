@@ -43,7 +43,11 @@ unsigned int take_r_fork(t_philo *philo, unsigned long time_start)
 	pthread_mutex_lock(&philo->r_fork->mutex);
 	if (philo->r_fork->state == 0)
 	{
-		print(philo, FORK, time_start);
+		if (print(philo, FORK, time_start))
+		{
+			pthread_mutex_unlock(&philo->r_fork->mutex);
+			return (1);
+		}
 		philo->r_fork->state = 1;
 	}
 	else
@@ -67,7 +71,11 @@ unsigned int take_l_fork(t_philo *philo, unsigned long time_start)
 	pthread_mutex_lock(&philo->l_fork->mutex);
 	if (philo->l_fork->state == 0)
 	{
-		print(philo, FORK, time_start);
+		if (print(philo, FORK, time_start))
+		{
+			pthread_mutex_unlock(&philo->l_fork->mutex);
+			return (1);
+		}
 		philo->l_fork->state = 1;
 	}
 	else
