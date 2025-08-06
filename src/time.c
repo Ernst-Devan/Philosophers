@@ -19,10 +19,9 @@ bool	ft_usleep(t_philo *philo, unsigned long time_sleep, unsigned long time_star
 {	
 	unsigned long initial;
 
-	initial = current_time(time_start);
-	while (current_time(time_start) < initial + time_sleep / 1000)
+	initial = get_time() + time_sleep;
+	while (get_time() < initial)
 	{
-		usleep(100);
 		pthread_mutex_lock(&philo->data->mutex_die);
 		if (philo->data->philo_die == 1)
 		{
@@ -31,10 +30,8 @@ bool	ft_usleep(t_philo *philo, unsigned long time_sleep, unsigned long time_star
 		}
 		pthread_mutex_unlock(&philo->data->mutex_die);
 		if (check_death(philo, time_start))
-		{
-			kill_philo(philo, time_start);
 			return (1);
-		}
+		usleep(DEFAULT);
 	}
 	return (0);
 }

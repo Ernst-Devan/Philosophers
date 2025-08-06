@@ -14,27 +14,43 @@
 #include "stdio.h"
 #include <pthread.h>
 
+bool	enough_eat(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->data->mutex_eat);
+	if (philo->data->all_eat >= philo->data->nb_eat)
+	{
+		pthread_mutex_unlock(&philo->data->mutex_eat);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->data->mutex_eat);
+	return (0);
+}
+
+void	adding_dinner(t_philo *philo)
+{
+	philo->nb_eat++;
+	pthread_mutex_lock(&philo->data->mutex_eat);
+	if (philo->nb_eat == philo->data->nb_eat)
+		philo->data->all_eat += 1;
+	pthread_mutex_unlock(&philo->data->mutex_eat);
+}
+
 void	*routine(void *thread)
 {
 	t_philo *philo;
-	unsigned int i;
 	
 	philo = (t_philo *)thread;
 	while (check_ready(philo->data) == 0) 
-		usleep(100);
-	i = 0;
+		usleep(DEFAULT);
 	if (philo->id % 2)
-		usleep(25000);
-	while (i < philo->data->nb_eat)
+		usleep(DELAY);
+	while (1)
 	{
 		if (go_think(philo, philo->data->time_start))
 			return (NULL);
 		if (go_eat(philo, philo->data->time_start))
 			return (NULL);
-		if (go_think(philo, philo->data->time_start))
-			return (NULL);
-		usleep(100);
-		i++;
+		usleep(DEFAULT);
 	}
 	return (NULL);
 }
@@ -51,13 +67,6 @@ int go_sleep(t_philo *philo, unsigned long time_start)
 
 int	go_think(t_philo *philo, unsigned long time_start)
 {
-	pthread_mutex_lock(&philo->data->mutex_die);
-	if (philo->data->philo_die)
-	{
-		pthread_mutex_unlock(&philo->data->mutex_die);
-		return (1);
-	}
-	pthread_mutex_unlock(&philo->data->mutex_die);
 	if (philo->state == THINK)
 		return (0);
 	if (print(philo, THINK, time_start))
@@ -76,12 +85,7 @@ int go_eat(t_philo *philo, unsigned long time_start)
 	philo->last_meal = current_time(time_start);
 	if (ft_usleep(philo, philo->data->time_eat, time_start))
 		return (1);
-	pthread_mutex_lock(&philo->l_fork->mutex);
-	philo->l_fork->state = 0;
-	pthread_mutex_unlock(&philo->l_fork->mutex);
-	pthread_mutex_lock(&philo->r_fork->mutex);
-	philo->r_fork->state = 0;
-	pthread_mutex_unlock(&philo->r_fork->mutex);
+	release_forks(philo);
 	if (go_sleep(philo, time_start))
 		return (1);
 	return (0);

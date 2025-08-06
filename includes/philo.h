@@ -6,6 +6,14 @@
 # include <unistd.h>
 # include <stdbool.h>
 
+// DEFINES
+
+# define DEFAULT 200
+# define DELAY 20000
+# define DEAD 1
+
+// STRUCTS
+
 enum e_state {
 	EAT,
 	FORK,
@@ -41,7 +49,7 @@ typedef struct s_data
 	pthread_mutex_t		mutex_die;
 	bool				philo_die;
 	pthread_mutex_t		mutex_eat;
-	bool				all_eat;
+	unsigned int		all_eat;
 } t_data;
 
 
@@ -53,6 +61,7 @@ typedef struct s_philo
 	t_fork			*r_fork;
 	t_fork			*l_fork;
 	t_data			*data;
+	unsigned int	nb_eat;
 } t_philo;
 
 
@@ -77,10 +86,10 @@ int				invite_philosophers(t_data *data, t_philo **philo);
 int				set_table(unsigned int nb_philo, t_fork **fork);
 
 // Fork.c
+void			release_forks(t_philo *philo);
 unsigned int	assign_fork(t_data *data, t_philo *philo, t_fork *forks);
 int				lock_fork(t_philo *philo);
 int				unlock_fork(t_philo *philo);
-int				take_fork(t_philo *philo, unsigned long time_start);
 bool			fork_available(t_philo *philo, unsigned long time_start);
 
 

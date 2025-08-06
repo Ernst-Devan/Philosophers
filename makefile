@@ -9,7 +9,6 @@ SRCS = philosophers.c \
 	   debug.c		  \
 	   init.c		  \
 	   utils.c		  \
-	   dinner.c		  \
 	   fork.c		  \
 	   time.c		  \
 	   thread.c		  \

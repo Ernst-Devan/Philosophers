@@ -20,9 +20,9 @@
 void	init_data(t_data *data, char **argv, int argc)
 {
 	data->nb_philo = ft_atoi(argv[1]);
-	data->time_die = ft_atoi(argv[2]) * 1000;
-	data->time_eat = ft_atoi(argv[3]) * 1000;
-	data->time_sleep = ft_atoi(argv[4]) * 1000;
+	data->time_die = ft_atoi(argv[2]);
+	data->time_eat = ft_atoi(argv[3]);
+	data->time_sleep = ft_atoi(argv[4]);
 	if (argc == 6)
 		data->nb_eat = ft_atoi(argv[5]);
 	else
@@ -45,7 +45,7 @@ int	invite_philosophers(t_data *data, t_philo **philo)
 	i = 0;
 	while (i < data->nb_philo)
 	{
-		(*philo)[i].id = i;
+		(*philo)[i].id = i + 1;
 		(*philo)[i].state = ALIVE;
 		(*philo)[i].l_fork = NULL;
 		(*philo)[i].r_fork = NULL;
