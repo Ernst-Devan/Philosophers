@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 15:36:03 by dernst            #+#    #+#             */
-/*   Updated: 2025/07/16 15:36:21 by dernst           ###   ########.fr       */
+/*   Updated: 2025/08/07 14:57:31 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ u_int8_t	check_alpha(char *str)
 
 u_int8_t	check_all(char **argv, int argc)
 {
-	u_int8_t i;
+	u_int8_t	i;
 
 	i = 1;
 	while (i < argc)

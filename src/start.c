@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 15:11:29 by dernst            #+#    #+#             */
-/*   Updated: 2025/07/29 00:30:59 by dernst           ###   ########lyon.fr   */
+/*   Updated: 2025/08/07 14:52:35 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <pthread.h>
 #include <stdio.h>
 
-int check_ready(t_data *data)
+int	check_ready(t_data *data)
 {
 	pthread_mutex_lock(&data->mutex_state);
 	if (data->state == 1)

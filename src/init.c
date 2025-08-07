@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 15:17:57 by dernst            #+#    #+#             */
-/*   Updated: 2025/07/23 18:27:12 by dernst           ###   ########.fr       */
+/*   Updated: 2025/08/07 14:53:08 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	init_data(t_data *data, char **argv, int argc)
 		data->nb_eat = ft_atoi(argv[5]);
 	else
 		data->nb_eat = -1;
-	data->state = WAIT;
+	data->state = 0;
 	data->philo_die = 0;
 	data->all_eat = 0;
 	pthread_mutex_init(&data->mutex_state, NULL);
@@ -39,6 +39,7 @@ void	init_data(t_data *data, char **argv, int argc)
 int	invite_philosophers(t_data *data, t_philo **philo)
 {
 	unsigned int	i;
+
 	*philo = malloc((data->nb_philo) * sizeof(t_philo));
 	if (!(*philo))
 		return (1);
@@ -46,7 +47,6 @@ int	invite_philosophers(t_data *data, t_philo **philo)
 	while (i < data->nb_philo)
 	{
 		(*philo)[i].id = i + 1;
-		(*philo)[i].state = ALIVE;
 		(*philo)[i].l_fork = NULL;
 		(*philo)[i].r_fork = NULL;
 		(*philo)[i].data = data;

@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 16:50:48 by dernst            #+#    #+#             */
-/*   Updated: 2025/07/23 17:32:00 by dernst           ###   ########.fr       */
+/*   Updated: 2025/08/07 15:58:58 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,9 @@
 #include <threads.h>
 #include <stdio.h>
 
-unsigned int	print(t_philo *philo, enum e_state state, unsigned long time_start)
+unsigned int	print(t_philo *philo, enum e_state state, unsigned long start)
 {
-	unsigned long	time;
-
-
 	pthread_mutex_lock(&philo->data->mutex_printf);
-	time = current_time(time_start);
 	pthread_mutex_lock(&philo->data->mutex_die);
 	if (philo->data->philo_die == 1)
 	{
@@ -32,7 +28,7 @@ unsigned int	print(t_philo *philo, enum e_state state, unsigned long time_start)
 	else if (state == DIE)
 		philo->data->philo_die = 1;
 	pthread_mutex_unlock(&philo->data->mutex_die);
-	printf("%lu %d", time, philo->id);
+	printf("%lu %d", current_time(start), philo->id);
 	if (state == EAT)
 		printf(" is eating\n");
 	if (state == SLEEP)

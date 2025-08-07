@@ -6,7 +6,6 @@ SRC_DIR := src/
 
 SRCS = philosophers.c \
 	   check.c		  \
-	   debug.c		  \
 	   init.c		  \
 	   utils.c		  \
 	   fork.c		  \

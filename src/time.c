@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 16:16:49 by dernst            #+#    #+#             */
-/*   Updated: 2025/07/29 00:54:49 by dernst           ###   ########lyon.fr   */
+/*   Updated: 2025/08/07 15:57:14 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,12 @@
 #include <stdio.h>
 #include <pthread.h>
 
-bool	ft_usleep(t_philo *philo, unsigned long time_sleep, unsigned long time_start)
-{	
-	unsigned long initial;
+bool	ft_usleep(t_philo *philo, unsigned long sleep,
+				unsigned long start)
+{
+	unsigned long	initial;
 
-	initial = get_time() + time_sleep;
+	initial = get_time() + sleep;
 	while (get_time() < initial)
 	{
 		pthread_mutex_lock(&philo->data->mutex_die);
@@ -29,14 +30,14 @@ bool	ft_usleep(t_philo *philo, unsigned long time_sleep, unsigned long time_star
 			return (1);
 		}
 		pthread_mutex_unlock(&philo->data->mutex_die);
-		if (check_death(philo, time_start))
+		if (check_death(philo, start))
 			return (1);
 		usleep(DEFAULT);
 	}
 	return (0);
 }
 
-unsigned long get_time()
+unsigned long	get_time(void)
 {
 	struct timeval	tv;
 
@@ -46,7 +47,7 @@ unsigned long get_time()
 
 unsigned long	current_time(unsigned long time_start)
 {
-	unsigned long simulation_time;
+	unsigned long	simulation_time;
 
 	simulation_time = get_time() - time_start;
 	return (simulation_time);

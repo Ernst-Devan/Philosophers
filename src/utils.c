@@ -6,11 +6,11 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 15:22:21 by dernst            #+#    #+#             */
-/*   Updated: 2025/07/16 15:24:01 by dernst           ###   ########.fr       */
+/*   Updated: 2025/08/07 14:52:26 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_atoi(char *str)
+int	ft_atoi(char *str)
 {
 	long int		nb;
 	unsigned int	i;
@@ -20,9 +20,8 @@ int		ft_atoi(char *str)
 	while (str[i])
 	{
 		nb *= 10;
-		nb += str[i] -= '0';
+		nb += str[i] - '0';
 		i++;
 	}
 	return (nb);
 }
-
