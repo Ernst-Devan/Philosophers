@@ -33,7 +33,7 @@ DEPS := $(OBJS:.o=.d)
 
 CPPFLAGS += -MMD -MP $(addprefix -I,$(INCLUDES))
 
-CFLAGS += -g3 -Wall -Wextra -Werror -lpthread
+CFLAGS += -Wall -Wextra -Werror -lpthread
 
 # --- COMPILATER --- #
 
@@ -63,9 +63,6 @@ fclean: clean
 re:
 	$(MAKE) fclean
 	$(MAKE) all
-
-debug: $(NAME)
-	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=valgrind_readline.supp ./$(NAME)
 
 print-%:
 	@echo $(patsubst print-%,%,$@)=

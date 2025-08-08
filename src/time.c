@@ -12,7 +12,6 @@
 
 #include "philo.h"
 #include <sys/time.h>
-#include <stdio.h>
 #include <pthread.h>
 
 bool	ft_usleep(t_philo *philo, unsigned long sleep,

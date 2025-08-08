@@ -13,6 +13,7 @@
 #include "philo.h"
 #include <pthread.h>
 #include <sys/types.h>
+#include <unistd.h>
 
 unsigned int	assign_fork(t_data *data, t_philo *philo, t_fork *forks)
 {
@@ -42,44 +43,38 @@ void	release_forks(t_philo *philo)
 }
 
 unsigned int	take_fork(t_philo *philo, t_fork *fork,
-						unsigned long time_start)
+						unsigned long time_start, unsigned int *fork_val)
 {
-	while (1)
+	pthread_mutex_lock(&fork->mutex);
+	if (print(philo, FORK, time_start, TAKEN_FORK))
 	{
-		if (check_death(philo, time_start))
-			return (1);
-		pthread_mutex_lock(&fork->mutex);
-		if (fork->state == 0)
-		{
-			if (print(philo, FORK, time_start))
-			{
-				pthread_mutex_unlock(&fork->mutex);
-				return (1);
-			}
-			fork->state = 1;
-			pthread_mutex_unlock(&fork->mutex);
-			return (0);
-		}
 		pthread_mutex_unlock(&fork->mutex);
-		usleep(DEFAULT);
+		return (1);
 	}
+	fork->state = 1;
+	*fork_val = 1;
+	pthread_mutex_unlock(&fork->mutex);
+	return (0);
 }
 
 bool	choose_forks(t_philo *philo, unsigned long time_start)
 {
-	if (philo->id % 2)
+	unsigned int	fork1;
+	unsigned int	fork2;
+
+	fork1 = 0;
+	fork2 = 0;
+	while (fork1 == 0 || fork2 == 0)
 	{
-		if (take_fork(philo, philo->r_fork, time_start))
-			return (DEAD);
-		if (take_fork(philo, philo->l_fork, time_start))
-			return (DEAD);
-	}
-	else
-	{
-		if (take_fork(philo, philo->l_fork, time_start))
-			return (DEAD);
-		if (take_fork(philo, philo->r_fork, time_start))
-			return (DEAD);
+		if (check_death(philo, time_start))
+			return (1);
+		if (philo->r_fork->state == 0)
+			if (take_fork(philo, philo->r_fork, time_start, &fork1))
+				return (1);
+		if (philo->l_fork->state == 0)
+			if (take_fork(philo, philo->l_fork, time_start, &fork2))
+				return (1);
+		usleep(DEFAULT);
 	}
 	return (0);
 }

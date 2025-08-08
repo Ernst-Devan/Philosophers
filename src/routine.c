@@ -35,6 +35,7 @@ void	*routine(void *thread)
 		usleep(DEFAULT);
 	if (philo->id % 2)
 		usleep(DELAY);
+	philo->last_meal = get_time();
 	while (philo->data->nb_eat != 0 && !enough_eat(philo))
 	{
 		if (go_think(philo, philo->data->time_start))
@@ -48,7 +49,7 @@ void	*routine(void *thread)
 
 int	go_sleep(t_philo *philo, unsigned long time_start)
 {
-	if (print(philo, SLEEP, time_start))
+	if (print(philo, SLEEP, time_start, IS_SLEEP))
 		return (1);
 	if (ft_usleep(philo, philo->data->time_sleep, time_start))
 		return (1);
@@ -57,7 +58,7 @@ int	go_sleep(t_philo *philo, unsigned long time_start)
 
 int	go_think(t_philo *philo, unsigned long time_start)
 {
-	if (print(philo, THINK, time_start))
+	if (print(philo, THINK, time_start, IS_THINK))
 		return (1);
 	return (0);
 }
@@ -66,7 +67,7 @@ int	go_eat(t_philo *philo, unsigned long time_start)
 {
 	if (fork_available(philo, time_start))
 		return (1);
-	if (print(philo, EAT, time_start))
+	if (print(philo, EAT, time_start, IS_EAT))
 		return (1);
 	philo->last_meal = get_time();
 	if (ft_usleep(philo, philo->data->time_eat, time_start))

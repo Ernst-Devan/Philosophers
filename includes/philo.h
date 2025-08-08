@@ -23,9 +23,13 @@
 # define DEFAULT 200
 # define DELAY 20000
 # define DEAD 1
+# define TAKEN_FORK "has taken fork\n"
+# define IS_EAT "is eating\n"
+# define IS_SLEEP "is sleeping\n"
+# define IS_THINK "is thinking\n"
+# define IS_DIED "is died\n"
 
 // STRUCTS
-
 enum e_state
 {
 	EAT,
@@ -48,7 +52,7 @@ typedef struct s_data
 	unsigned int		nb_eat;
 	unsigned int		time_eat;
 	unsigned int		time_sleep;
-	unsigned int		time_die;
+	unsigned long		time_die;
 	unsigned long		time_start;
 	pthread_mutex_t		mutex_printf;
 	pthread_mutex_t		mutex_state;
@@ -71,35 +75,28 @@ typedef struct s_philo
 
 // Death.c
 bool			check_death(t_philo *philo, unsigned long time_start);
-unsigned int	kill_philo(t_philo *philo, unsigned long time_start);
 bool			check_philo_die(t_data *data);
-unsigned int	death_print(t_philo *philo, unsigned long time_start);
 
 // Time.c
-unsigned long	get_time(void);
-unsigned long	current_time(unsigned long time_start);
 bool			ft_usleep(t_philo *philo, unsigned long sleep,
 					unsigned long start);
-
-// Debug.c
-void			display_data(t_data data);
-void			display_philo(t_philo *philo, unsigned int nb_philo);
+unsigned long	get_time(void);
+unsigned long	current_time(unsigned long time_start);
 
 // Init.c
 void			init_data(t_data *data, char **argv, int argc);
 int				invite_philosophers(t_data *data, t_philo **philo);
+unsigned int	assign_fork(t_data *data, t_philo *philo, t_fork *forks);
 int				set_table(unsigned int nb_philo, t_fork **fork);
 
 // Fork.c
+bool			enough_eat(t_philo *philo);
 void			release_forks(t_philo *philo);
-unsigned int	assign_fork(t_data *data, t_philo *philo, t_fork *forks);
-int				lock_fork(t_philo *philo);
-int				unlock_fork(t_philo *philo);
 bool			fork_available(t_philo *philo, unsigned long time_start);
 
 // Thread.c
 int				launch_dinner(t_data *data, t_philo *philo);
-int				waiting_threads(t_data *data, pthread_t *threads);
+int				waiting_threads(t_philo *philo, pthread_t *threads);
 int				launch_threads(t_philo *philo, pthread_t *threads);
 
 // Utils.c
@@ -119,6 +116,7 @@ int				go_eat(t_philo *philo, unsigned long time_start);
 unsigned int	check_args(char **argv, int argc);
 
 // Print.c
-unsigned int	print(t_philo *philo, enum e_state state, unsigned long time);
+unsigned int	print(t_philo *philo, enum e_state state,
+					unsigned long time, char *msg);
 
 #endif
