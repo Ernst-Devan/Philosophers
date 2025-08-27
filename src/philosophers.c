@@ -58,7 +58,10 @@ int	main(int argc, char **argv)
 	if (prepare_dinner(&data, &philo, &fork))
 		return (1);
 	if (launch_dinner(&data, philo))
+	{
+		free(fork);
 		return (1);
+	}
 	free(philo);
 	free(fork);
 	return (0);

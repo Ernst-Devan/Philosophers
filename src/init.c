@@ -51,6 +51,7 @@ int	invite_philosophers(t_data *data, t_philo **philo)
 		(*philo)[i].r_fork = NULL;
 		(*philo)[i].data = data;
 		(*philo)[i].last_meal = 0;
+		(*philo)[i].nb_eat = 0;
 		i++;
 	}
 	return (0);

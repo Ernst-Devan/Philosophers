@@ -17,11 +17,14 @@
 
 int	launch_dinner(t_data *data, t_philo *philo)
 {
-	pthread_t		*threads;
+	pthread_t	*threads;
 
 	threads = malloc(data->nb_philo * sizeof(pthread_t));
 	if (!threads)
+	{
+		free(philo);
 		return (1);
+	}
 	launch_threads(philo, threads);
 	set_ready(data);
 	waiting_threads(philo, threads);
@@ -33,6 +36,9 @@ void	free_mutex(t_philo *philo)
 {
 	pthread_mutex_destroy(&philo->l_fork->mutex);
 	pthread_mutex_destroy(&philo->r_fork->mutex);
+
+	// DESTORY ALL MUTEX FORK NOT ONLY JUST TWO
+
 	pthread_mutex_destroy(&philo->data->mutex_die);
 	pthread_mutex_destroy(&philo->data->mutex_printf);
 	pthread_mutex_destroy(&philo->data->mutex_eat);
@@ -54,15 +60,36 @@ int	waiting_threads(t_philo *philo, pthread_t *threads)
 	return (0);
 }
 
+int	return_threads(t_philo *philo, pthread_t *threads, unsigned int nb_threads)
+{
+	unsigned int i;
+
+	i = 0;
+
+	while (i < nb_threads)
+	{
+		printf("test\n");
+		if (pthread_join(threads[i], NULL))
+			return (1);
+		i++;
+	}
+	free_mutex(philo);
+	return (0);
+}
+
 int	launch_threads(t_philo *philo, pthread_t *threads)
 {
 	unsigned int	i;
 
 	i = 0;
 	while (i < philo->data->nb_philo)
-	{
-		if (pthread_create(&threads[i], NULL, &routine, &philo[i]) != 0)
-			return (1);
+	{	
+		pthread_create(&threads[0], NULL, &routine, &philo[0]);
+		pthread_create(&threads[1], NULL, &routine, &philo[1]);
+		pthread_create(&threads[2], NULL, &routine, &philo[2]);
+
+		return_threads(philo, threads, 4);
+		return (1);
 		i++;
 	}
 	return (0);

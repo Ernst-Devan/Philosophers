@@ -33,7 +33,7 @@ DEPS := $(OBJS:.o=.d)
 
 CPPFLAGS += -MMD -MP $(addprefix -I,$(INCLUDES))
 
-CFLAGS += -Wall -Wextra -Werror -lpthread
+CFLAGS += -Wall -Wextra -Werror -lpthread -g3
 
 # --- COMPILATER --- #
 

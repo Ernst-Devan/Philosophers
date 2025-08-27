@@ -56,7 +56,7 @@ typedef struct s_data
 	unsigned long		time_start;
 	pthread_mutex_t		mutex_printf;
 	pthread_mutex_t		mutex_state;
-	bool				state;
+	unsigned int		state;
 	pthread_mutex_t		mutex_die;
 	bool				philo_die;
 	pthread_mutex_t		mutex_eat;
