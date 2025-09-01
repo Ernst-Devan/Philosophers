@@ -43,24 +43,34 @@ void	release_forks(t_philo *philo)
 }
 
 unsigned int	take_fork(t_philo *philo, t_fork *fork,
-						unsigned long time_start, unsigned int *fork_val)
+					unsigned long time_start, bool *fork_val)
 {
-	pthread_mutex_lock(&fork->mutex);
 	if (print(philo, FORK, time_start, TAKEN_FORK))
-	{
-		pthread_mutex_unlock(&fork->mutex);
 		return (1);
-	}
 	fork->state = 1;
 	*fork_val = 1;
+	return (0);
+}
+
+bool	lock_fork(t_philo *philo, t_fork *fork, unsigned long start, bool *val)
+{
+	pthread_mutex_lock(&fork->mutex);
+	if (fork->state == 0)
+	{
+		if (take_fork(philo, fork, start, val))
+		{
+			pthread_mutex_unlock(&fork->mutex);
+			return (1);
+		}
+	}
 	pthread_mutex_unlock(&fork->mutex);
 	return (0);
 }
 
 bool	choose_forks(t_philo *philo, unsigned long time_start)
 {
-	unsigned int	fork1;
-	unsigned int	fork2;
+	bool	fork1;
+	bool	fork2;
 
 	fork1 = 0;
 	fork2 = 0;
@@ -68,20 +78,9 @@ bool	choose_forks(t_philo *philo, unsigned long time_start)
 	{
 		if (check_death(philo, time_start))
 			return (1);
-		if (philo->r_fork->state == 0)
-			if (take_fork(philo, philo->r_fork, time_start, &fork1))
-				return (1);
-		if (philo->l_fork->state == 0)
-			if (take_fork(philo, philo->l_fork, time_start, &fork2))
-				return (1);
+		lock_fork(philo, philo->r_fork, time_start, &fork1);
+		lock_fork(philo, philo->l_fork, time_start, &fork2);
 		usleep(DEFAULT);
 	}
-	return (0);
-}
-
-bool	fork_available(t_philo *philo, unsigned long time_start)
-{
-	if (choose_forks(philo, time_start))
-		return (DEAD);
 	return (0);
 }

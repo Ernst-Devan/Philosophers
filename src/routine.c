@@ -35,9 +35,7 @@ void	*routine(void *thread)
 		usleep(DEFAULT);
 	pthread_mutex_lock(&philo->data->mutex_state);
 	if (philo->data->state == 2)
-	{
 		return (NULL);
-	}
 	pthread_mutex_unlock(&philo->data->mutex_state);
 	if (philo->id % 2)
 		usleep(DELAY);

@@ -10,10 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "philo.h"
 #include "stdio.h"
 #include <sys/types.h>
 
-u_int8_t	check_alpha(char *str)
+unsigned int	check_alpha(char *str)
 {
 	while (*str && str)
 	{
@@ -26,7 +27,7 @@ u_int8_t	check_alpha(char *str)
 	return (0);
 }
 
-u_int8_t	check_all(char **argv, int argc)
+unsigned int	check_all(char **argv, int argc)
 {
 	u_int8_t	i;
 
@@ -43,7 +44,7 @@ u_int8_t	check_all(char **argv, int argc)
 	return (0);
 }
 
-u_int8_t	check_args(char **argv, int argc)
+unsigned int	check_args(char **argv, int argc)
 {
 	if (argc < 5 || argc > 6)
 	{
@@ -55,5 +56,12 @@ u_int8_t	check_args(char **argv, int argc)
 	}
 	if (check_all(argv, argc))
 		return (1);
+	return (0);
+}
+
+bool	fork_available(t_philo *philo, unsigned long time_start)
+{
+	if (choose_forks(philo, time_start))
+		return (DEAD);
 	return (0);
 }

@@ -23,7 +23,7 @@
 # define DEFAULT 200
 # define DELAY 20000
 # define DEAD 1
-# define TAKEN_FORK "has taken fork\n"
+# define TAKEN_FORK "has taken a fork\n"
 # define IS_EAT "is eating\n"
 # define IS_SLEEP "is sleeping\n"
 # define IS_THINK "is thinking\n"
@@ -93,6 +93,7 @@ int				set_table(unsigned int nb_philo, t_fork **fork);
 bool			enough_eat(t_philo *philo);
 void			release_forks(t_philo *philo);
 bool			fork_available(t_philo *philo, unsigned long time_start);
+bool			choose_forks(t_philo *philo, unsigned long time_start);
 
 // Thread.c
 int				launch_dinner(t_data *data, t_philo *philo);

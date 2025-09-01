@@ -18,11 +18,6 @@
 #include "stdlib.h"
 #include <stdio.h>
 
-//dont accept number more than int max and negative number
-// Number of philo musn't be 0 or negative or too high
-// Destroy mutex at the end  !!!!!!!!!!!!!!!
-// 
-//
 int	prepare_dinner(t_data *data, t_philo **philo, t_fork **fork)
 {
 	if (invite_philosophers(data, philo))
