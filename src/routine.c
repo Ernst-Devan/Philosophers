@@ -33,6 +33,12 @@ void	*routine(void *thread)
 	philo = (t_philo *)thread;
 	while (check_ready(philo->data) == 0)
 		usleep(DEFAULT);
+	pthread_mutex_lock(&philo->data->mutex_state);
+	if (philo->data->state == 2)
+	{
+		return (NULL);
+	}
+	pthread_mutex_unlock(&philo->data->mutex_state);
 	if (philo->id % 2)
 		usleep(DELAY);
 	philo->last_meal = get_time();

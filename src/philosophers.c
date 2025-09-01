@@ -26,11 +26,21 @@
 int	prepare_dinner(t_data *data, t_philo **philo, t_fork **fork)
 {
 	if (invite_philosophers(data, philo))
+	{
+		free(*philo);
 		return (1);
+	}
 	if (set_table(data->nb_philo, fork))
+	{
+		free(*philo);
 		return (1);
+	}
 	if (assign_fork(data, *philo, *fork))
+	{
+		free(fork);
+		free(*philo);
 		return (1);
+	}
 	return (0);
 }
 
@@ -59,6 +69,7 @@ int	main(int argc, char **argv)
 		return (1);
 	if (launch_dinner(&data, philo))
 	{
+		free(philo);
 		free(fork);
 		return (1);
 	}
